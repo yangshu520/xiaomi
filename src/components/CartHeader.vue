@@ -1,15 +1,15 @@
 <template>
     <div>
-        nav-header
+        cart-header
     </div>
 </template>
 
 <script>
     export default {
-        name:'nav-header'
+        name:'cart-header'
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

@@ -1,4 +1,4 @@
-# xiaom
+# xiaomi
 
 ## Project setup
 ```

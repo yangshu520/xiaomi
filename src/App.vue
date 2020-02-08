@@ -4,6 +4,19 @@
   </div>
 </template>
 
-<style lang="less">
+<script>
+  import storage from './storage/index'
+  export default{
+    data() {
+      return {
+        key: ''
+      }
+    },
+    mounted(){
+      storage.setItem('a',44,'user')
+    }
+}
+</script>
 
+<style>
 </style>

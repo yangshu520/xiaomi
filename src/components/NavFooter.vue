@@ -1,6 +1,6 @@
 <template>
     <div>
-        wode
+        nav-footer
     </div>
 </template>
 
