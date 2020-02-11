@@ -13,10 +13,28 @@
       }
     },
     mounted(){
-      storage.setItem('a',44,'user')
+      this.getUser();
+      this.getCartCount();
+    },
+    methods:{
+      getUser(){
+        this.axios.get('/user').then((res)=>{
+          //保存到vuex里面
+          this.$store.dispatch('saveUserName',res.username)
+        })
+      },
+      getCartCount(){
+        this.axios.get('/carts/products/sum').then((res)=>{
+          //保存到vuex中
+          this.$store.dispatch('saveCartCount',res)
+        })
+      }
     }
 }
 </script>
 
-<style>
+<style lang="scss">
+@import './assets/sass/reset.scss';
+@import './assets/sass/config.scss';
+@import './assets/sass/buttons.scss';
 </style>

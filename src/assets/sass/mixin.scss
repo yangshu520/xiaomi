@@ -1,0 +1,35 @@
+//flex布局复用
+@mixin flex($jus:space-between, $ali:center) {
+    display: flex;
+    justify-content: $jus; //两边对齐
+    align-items: $ali; //垂直居中
+}
+
+//背景图片复用
+@mixin bgImg($w:0, $h:0, $img:'', $size:contain) {
+    display: inline-block;
+    width: $w;
+    height: $h;
+    background: url($img) no-repeat center;
+    background-size: $size; //contain让背景图片撑满容器
+}
+
+//定位复用
+@mixin position($pos:absolute, $top:0, $left:0, $w:100%, $h:100%) {
+    position: $pos;
+    top: $top;
+    left: $left;
+    width: $w;
+    height: $h;
+}
+
+//定位图片复用
+@mixin positionImg($pos:absolute, $top:0, $right:0, $w:0, $h:0, $img:'', $size:contain) {
+    position: $pos;
+    top: $top;
+    right: $right;
+    width: $w;
+    height: $h;
+    background: url($img) no-repeat center;
+    background-size: $size; //contain让背景图片撑满容器
+}
