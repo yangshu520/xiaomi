@@ -10,3 +10,28 @@ a {
         height: 100%;
     }
 }
+
+input {
+    outline: none;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+//清除浮动的集中方法 1.加标签 2.父亲清除浮动 3.维类
+.clearfix:before,
+.clearfix:after {
+    content: '';
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}

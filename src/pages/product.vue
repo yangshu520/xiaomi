@@ -1,15 +1,273 @@
 <template>
-    <div>
-
+    <div class="product">
+        <product-params :title="product.name">
+            <template v-slot:params>
+                <div> 
+                    <button class="btn" @click="buy">立即购买</button>
+                </div>
+            </template>
+        </product-params>
+        <div class="content">
+            <div class="item-bg">
+                <h2>{{product.name}}</h2>
+                <h3>{{product.subtitle}}</h3>
+                <p>
+                <a href="javascript:;" id="">全球首款双频 GP</a>
+                <span>|</span>
+                <a href="javascript:;" id="">骁龙845</a>
+                <span>|</span>
+                <a href="javascript:;" id="">AI 变焦双摄</a>
+                <span>|</span>
+                <a href="javascript:;" id="">红外人脸识别</a>
+                </p>
+                <div class="price">
+                <span>￥<em>{{product.price}}</em></span>
+                </div>
+            </div>
+            <div class="item-bg-2"></div>
+            <div class="item-bg-3"></div>
+            <div class="item-swiper">
+                <swiper :options="swiperOption">
+                    <swiper-slide><img src="../../public/imgs/product/gallery-2.png" alt=""></swiper-slide>
+                    <swiper-slide><img src="../../public/imgs/product/gallery-3.png" alt=""></swiper-slide>
+                    <swiper-slide><img src="../../public/imgs/product/gallery-4.png" alt=""></swiper-slide>
+                    <swiper-slide><img src="../../public/imgs/product/gallery-5.jpg" alt=""></swiper-slide>
+                    <swiper-slide><img src="../../public/imgs/product/gallery-6.jpg" alt=""></swiper-slide>
+                    <!-- Optional controls -->
+                    <div class="swiper-pagination"  slot="pagination"></div>
+                </swiper>
+                <p class="desc">{{product.name}} AI变焦双摄拍摄</p>
+            </div>
+            <div class="item-video">
+                <h2>60帧超慢动作摄影<br/>慢慢回味每一瞬间的精彩</h2>
+                <p>后置960帧电影般超慢动作视频，将眨眼间的美妙展现得淋漓尽致！<br/>更能AI 精准分析视频内容，15个场景智能匹配背景音效。</p>
+                <div class="video-bg" @click="showSlide='slideDown'"></div>
+                <div class="video-box" v-if="showSlide">
+                    <div class="overlay" v-if="showSlide=='slideDown'"></div>
+                    <div class="video" :class="showSlide">
+                        <span class="icon-clos" @click="closeVideo"></span>
+                        <video src="../../public/imgs/product/video.mp4" controls autoplay muted></video>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
+    import {swiper,swiperSlide} from 'vue-awesome-swiper'
+    import ProductParams from '../components/ProductParams'
     export default {
-        
+        name:'product',
+        components:{
+            ProductParams,
+            swiper,
+            swiperSlide
+        },
+        data() {
+            return {
+                // showSlide:false,
+                showSlide:'',//控制动画
+                swiperOption:{ //轮播
+                    autoplay:true,
+                    slidesPerView:3,//设置slider容器能够同时显示的slides数量
+                    spaceBetween: 30,//在slide之间设置距离
+                    freeMode: true,//设置为true则变为free模式
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable :true,
+                    }
+                },
+                product:{},//商品信息
+            }
+        },
+        mounted(){
+            this.getProductInfo()
+        },
+        methods:{
+            getProductInfo(){
+                //获取动态路由的参数  是route 不是router
+                let id=this.$route.params.id
+                this.axios.get(`/products/+${id}`).then((res)=>{
+                    this.product=res;
+                })
+            },
+            buy(){
+                let id=this.$route.params.id;
+                this.$router.push(`/detail/${id}`)
+            },
+            closeVideo(){
+                this.showSlide='slideUp';
+                setTimeout(()=>{
+                    this.showSlide=''
+                },600)
+            }
+        }
     }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+  @import './../assets/sass/mixin.scss';
+  .product{
+    .content{
+      .item-bg{
+        background:url('../../public/imgs/product/product-bg-1.png') no-repeat center;
+        height:718px;
+        text-align:center;
+        h2{
+          font-size:80px;
+          padding-top:55px;
+        }
+        h3{
+          font-size:24px;
+          letter-spacing: 10px;
+        }
+        p{
+          margin-top:21px;
+          margin-bottom:40px;
+          a{
+            font-size:16px;
+            color:#333333;
+          }
+          span{
+            margin:0 15px;
+          }
+        }
+        .price{
+          font-size:30px;
+          color:#333333;
+          em{
+            font-style:normal;
+            font-size:38px;
+          }
+        }
+      }
+      .item-bg-2{
+        background:url('../../public/imgs/product/product-bg-2.png') no-repeat center;
+        height:480px;
+        background-size:1226px 397px;
+      }
+      .item-bg-3{
+        background:url('../../public/imgs/product/product-bg-3.png') no-repeat center;
+        height:638px;
+        background-size:cover;
+      }
+      .item-swiper{
+        margin:36px auto 52px;
+        .desc{
+          font-size:18px;
+          color:#333333;
+          text-align:center;
+        }
+        img{
+          width:100%;
+        }
+      }
+      .item-video{
+        height:1044px;
+        background-color:#070708;
+        margin-bottom:76px;
+        color:#FFFFFF;
+        text-align:center;
+        h2{
+          font-size:60px;
+          padding-top:82px;
+          margin-bottom:47px;
+        }
+        p{
+          font-size:24px;
+          margin-bottom:58px;
+        }
+        .video-bg{
+          background:url('../../public/imgs/product/gallery-1.png') no-repeat center;
+          background-size:cover;
+          width:1226px;
+          height:540px;
+          margin:0 auto 120px;
+          cursor:pointer;
+        }
+        .video-box{
+            .overlay{
+                @include position(fixed);
+                background-color: #333;
+                opacity: .4;
+                z-index: 11;
+            }
+            //animation 动画实现 
+            //上啦动画
+            @keyframes slideDown {
+                from {
+                    top:-100%;
+                    opacity: 0;
+                }
+                to{
+                    top:50%;
+                    opacity: 1;
+                }
+            }
+            //下拉动画
+            @keyframes slideUp {
+                from {
+                    top:50%;
+                    opacity: 1;
+                }
+                to{
+                    top:300%;
+                    opacity: 0;
+                }
+            }
+            .video{
+                position: fixed;//相对于浏览器定位
+                top: -100%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                z-index: 11;
+                width: 1000px;
+                height: 536px;
+                border-radius: 20px;
+                overflow: hidden;
+                opacity: 1;
+                //animation 动画实现 成对出现
+                &.slideDown{
+                    animation: slideDown .6s linear;
+                    top: 50%;
+                }
+                &.slideUp{
+                    animation: slideUp .6s linear;
+                }
+                //transition实现动画
+                // transition: all .6s;
+                // opacity: 0;
+                // &.slide{
+                //     top:50%;
+                //     opacity: 1;
+                // }
+                .icon-clos{
+                    @include bgImg(20px,20px,'../../public/imgs/icon-close.png');
+                    position: absolute;
+                    top: 25px;
+                    right: 25px;
+                    cursor: pointer;
+                    z-index: 11;
+                    transition: all .3s;
+                    background-color: #ff6600;
+                    border-radius: 50%;
+                    &:hover{
+                        transform: scale(1.3);
+                        transition: all .3s;
+                    }
+                }
+                video{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;//视频内容覆盖盒子
+                }
+            }
+        }
+      }
+    }
+    button{
+      margin-left:10px;
+    }
+  }
 </style>

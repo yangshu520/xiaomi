@@ -52,15 +52,20 @@ export default {
   methods:{
     login(){
         let {username,password}=this;
-        this.axios.post('/user/login',{
+        if(username.trim().length>0 && password.trim().length>0){
+          this.axios.post('/user/login',{
             username,
             password
-        }).then((res)=>{
+          }).then((res)=>{
             this.$cookie.set('userId',res.id,{expires:'1h'});
             //保存用户名
             this.$store.dispatch('saveUserName',res.username)
             this.$router.push('/index');
-        })
+          })
+        }else{
+          this.$message.info('用户名或密码不能为空')
+        }
+        
     },
     register(){
         this.axios.post('/user/register',{

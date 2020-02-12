@@ -114,8 +114,8 @@
             </div>
         <service-bar></service-bar>
         <modal 
-            title="提升"
-            sureText="详情" 
+            :title="username?'提交':'登入'"
+            :sureText="username?'查看商品详情':'前往登入'" 
             btnType="1" 
             modalType="middle"
             :showModal="showModal"
@@ -123,7 +123,7 @@
             @quxiao="showModal=false">
             <template v-slot:body>
                 <div>
-                    商品添加成功
+                    {{username?'商品添加成功':"请您先登入"}}
                 </div>
             </template>
         </modal>
@@ -148,6 +148,7 @@
     import img11 from '../../public/imgs/ads/ads-2.jpg'
     import img12 from '../../public/imgs/ads/ads-3.png'
     import img13 from '../../public/imgs/ads/ads-4.jpg'
+    import {mapState} from 'vuex'
     export default {
         name:'index',
         components:{
@@ -252,15 +253,16 @@
                 })
             },
             addCart(id){
-                // this.axios.post('/carts',{
-                //     productId:id,
-                //     selected: true
-                // }).then((res)=>{
-
-                // }).catch(()=>{
-                    
-                // })
-                this.showModal=true;
+                this.axios.post('/carts',{
+                    productId:id,
+                    selected: true
+                }).then((res)=>{
+                    this.showModal=true;
+                    this.$store.dispatch('saveCartCount',res.cartTotalQuantity)
+                }).catch(()=>{
+                    this.showModal=true;
+                })
+                
             }
         },
         filters:{
@@ -269,6 +271,9 @@
                 return '￥'+val.toFixed(2)+'元'
             }
         },
+        computed:{
+            ...mapState(['username'])
+        }
     }
 </script>
 
