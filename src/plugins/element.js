@@ -1,8 +1,7 @@
 import Vue from 'vue'
-import 'element-ui/lib/theme-chalk/index.css';
-import { Button, Message } from 'element-ui'
+import { Button, Message, Pagination } from 'element-ui'
 
-Vue.use(Button)
+Vue.use(Button).use(Pagination)
 
 
 Vue.prototype.$message = Message

@@ -11,7 +11,8 @@
                 <div class="topbar-user">
                     <a href="javascript:;" v-if="username">{{username}}</a>
                     <a href="javascript:;" v-if="!username" @click="login">登入</a>
-                    <a href="javascript:;" v-if="username">我的订单</a>
+                    <a href="javascript:;" v-if="username" @click="logout">退出</a>
+                    <a href="javascript:;" v-if="username" @click="$router.push('/order/list')">我的订单</a>
                     <a href="javascript:;" v-if="!username">注册</a>
                     <a href="javascript:;" class="my-cart" @click="gotoCart"><span class="icon-cart"></span>购物车({{cartCount}})</a>
                 </div>
@@ -30,7 +31,7 @@
                                 <li class="product" v-for="(item,index) in phoneList" :key="index">
                                     <a :href="'/#/product/'+item.id" target="_blank">
                                         <div class="pro-imgs">
-                                            <img :src="item.mainImage" :alt="item.name">
+                                            <img v-lazy="item.mainImage" :alt="item.name">
                                         </div>
                                         <div class="pro-name">{{item.name}}</div>
                                         <div class="pro-price">{{item.price | price}}</div>
@@ -199,7 +200,10 @@ import {mapState} from 'vuex'
             }
         },
         mounted(){
-            this.getPhoneList()
+            this.getPhoneList();
+            if(this.$route.params&&this.$route.params.from=='login'){
+               this.getCartCount();
+            }
         },
         methods:{
             getPhoneList(){
@@ -219,6 +223,20 @@ import {mapState} from 'vuex'
             },
             login(){
                 this.$router.push('/login')
+            },
+            logout(){
+                this.axios.post('/user/logout').then((res)=>{
+                    this.$message.success('退出成功')
+                    this.$cookie.set('userId','',{expires:'-1'});
+                    this.$store.dispatch('saveUserName','');
+                    this.$store.dispatch('saveCartCount','0');
+                })
+            },
+            getCartCount(){
+                this.axios.get('/carts/products/sum').then((res=0)=>{
+                //保存到vuex中
+                this.$store.dispatch('saveCartCount',res)
+                })
             }
         }
     }

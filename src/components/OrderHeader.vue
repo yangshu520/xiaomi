@@ -32,6 +32,7 @@
 @import './../assets/sass/mixin.scss';
 .order-header{
     box-sizing: border-box;
+    border-bottom: 2px solid #ff6600;
     height: 116px;
     padding: 30px 0;
     .container{

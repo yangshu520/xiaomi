@@ -2,12 +2,13 @@ import Vue from 'vue'
 import axios from 'axios'
 import vueLazyload from 'vue-lazyload'
 import VueCookie from 'vue-cookie'
+import { Message } from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css';
 
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import './plugins/element.js'
-import img from '../public/imgs/loading-svg/loading-spin.svg'
 
 //根据前端跨域方式做调整
 axios.defaults.baseURL = '/api'; //接口代理的方式
@@ -25,14 +26,18 @@ axios.interceptors.response.use(function(response) {
             return Promise.reject(res)
         }
     } else {
-        alert(res.msg)
-        return Promise.reject(res)
+        Message.warning(res.msg)
+        return Promise.reject(res);
     }
+}, (error) => {
+    let res = error.response;
+    Message.error(res.data.msg);
+    return Promise.reject(res);
 })
 
 Vue.prototype.axios = axios
 Vue.use(vueLazyload, {
-    loading: img
+    loading: '/imgs/loading-svg/loading-bars.svg'
 });
 Vue.use(VueCookie);
 

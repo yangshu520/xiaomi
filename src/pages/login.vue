@@ -57,10 +57,19 @@ export default {
             username,
             password
           }).then((res)=>{
-            this.$cookie.set('userId',res.id,{expires:'1h'});
+            this.$cookie.set('userId',res.id,{expires:'Session'});
             //保存用户名
             this.$store.dispatch('saveUserName',res.username)
-            this.$router.push('/index');
+            this.$router.push({
+              // path:'/index',  query传参数 用path
+              // query:{
+              //   from:'login'
+              // }
+              name:'index', //params 传参数  用name 不会拼接
+              params:{
+                from:'login'
+              }
+            });
           })
         }else{
           this.$message.info('用户名或密码不能为空')

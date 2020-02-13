@@ -16,6 +16,8 @@
             <li class="col-1">小计</li>
             <li class="col-1">操作</li>
           </ul>
+          <loading v-if="loading"></loading>
+          <no-data v-if="cartList.length==0"></no-data>
           <ul class="cart-item-list">
             <li class="cart-item" v-for="(item,index) in cartList" :key="index">
               <div class="item-check">
@@ -45,7 +47,7 @@
           </div>
           <div class="total fr">
             合计：<span>{{cartTotalPrice}}</span>元
-            <a href="javascript:;" class="btn">去结算</a>
+            <a href="javascript:;" class="btn" @click="order">去结算</a>
           </div>
         </div>
       </div>
@@ -71,13 +73,17 @@
   import ServiceBar from './../components/ServiceBar'
   import NavFooter from './../components/NavFooter'
   import Modal from './../components/Modal'
+  import Loading from './../components/Loading'
+  import NoData from './../components/NoData'
   export default{
     name:'cart',
     components:{
       OrderHeader,
       ServiceBar,
       NavFooter,
-      Modal
+      Modal,
+      Loading,
+      NoData
     },
     data(){
       return {
@@ -88,6 +94,7 @@
           showModal:false,//控制模态框
           name:'',//删除的商品名字
           deleteId:'',//删除商品Id
+          loading:true,
       }
     },
     mounted(){
@@ -158,6 +165,17 @@
             this.cartcount=this.cartList.filter((item,index)=>{
                 return item.productSelected;
             })
+            this.loading=false
+        },
+        //订单结算
+        order(){
+          //eveny  返回的是boolean 值 每项符合条件返回true 只有有一项不符合返回false
+          let isCheck=this.cartList.every((item,index)=>!item.productSelected)
+          if(isCheck){
+            this.$message.info('请至少选择一件商品')
+          }else{
+            this.$router.push('/order/confirm');
+          }
         }
     }
   }
